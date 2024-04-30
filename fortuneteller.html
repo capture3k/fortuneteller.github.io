@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fortune Teller</title>
+  <style>
+    /* Basic styling */
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f9f9f9;
+      color: #333;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background-image: url('background.jpg'); /* Background image */
+      background-size: cover; /* Set background image to cover entire screen */
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+
+    .container {
+      background-color: rgba(0, 0, 0, 0.8); /* Semi-transparent black background for the container */
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      max-width: 80%; /* Adjusted to use percentage for responsiveness */
+    }
+
+    h1 {
+      font-size: 28px;
+      margin-bottom: 20px;
+      color: #fff;
+      text-transform: uppercase;
+    }
+
+    label {
+      font-size: 16px;
+      color: #fff;
+    }
+
+    input[type="text"] {
+      padding: 10px;
+      margin: 10px 0;
+      width: calc(100% - 20px); /* Adjusted width to accommodate padding */
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+
+    button {
+      padding: 10px 20px;
+      margin-top: 10px;
+      background-color: #ffa500;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #ff7f00;
+    }
+
+    #fortune {
+      font-size: 18px;
+      margin-top: 20px;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Fortune Teller</h1>
+    <label for="name">Enter your name:</label>
+    <input type="text" id="name">
+    <button onclick="tellFortune()">Tell me my fortune</button>
+    <p id="fortune"></p>
+  </div>
+
+  <script>
+    function tellFortune() {
+      var name = document.getElementById("name").value.toLowerCase();
+      var fortunes = [
+        "You will have a great day!",
+        "Expect a pleasant surprise!",
+        "Be cautious, challenges may arise.",
+        "A new opportunity will present itself soon.",
+        "Today is a good day to take risks.",
+        "You will receive good news shortly.",
+        "Your hard work will pay off.",
+        "Someone from your past will return.",
+        "Travel is in your future.",
+        "A new romantic interest will come into your life.",
+        "You will receive unexpected money.",
+        "It's time to let go of the past.",
+        "Your creativity will flourish.",
+        "A big change is coming.",
+        "Listen to your intuition.",
+        "Forgive others, not because they deserve forgiveness, but because you deserve peace.",
+        "Your health will improve.",
+        "An old friend will reconnect with you.",
+        "New opportunities for advancement will arise.",
+        "You will find inner peace.",
+        "Success is on the horizon.",
+        "Be open to new experiences.",
+        "Your kindness will be rewarded.",
+        "Your energy levels will soar.",
+        "A long-held dream will finally come true.",
+        "You will make a new friend.",
+        "Let go of fear; embrace courage.",
+        "Trust your instincts; they will not lead you astray.",
+        "A career breakthrough is imminent.",
+        "Take time for self-care.",
+        "A financial windfall is coming your way.",
+        "You will find love when you least expect it.",
+        "A problem that has been bothering you will soon be resolved.",
+        "Your inner strength will see you through tough times.",
+        "Opportunities for growth are on the horizon.",
+        "A period of great joy and fulfillment is coming.",
+        "You will overcome obstacles with ease.",
+        "Good fortune will find you wherever you go.",
+        "Stay focused on your goals; success is within reach.",
+        "Your confidence will attract new opportunities.",
+        "Let go of negative thoughts; positivity awaits.",
+        "Your perseverance will lead to success.",
+        "Embrace change; it will lead to growth.",
+        "An unexpected gift will brighten your day.",
+        "Your determination will yield impressive results.",
+        "Believe in yourself; you are capable of greatness.",
+        "Your future is full of promise and possibility.",
+        "The universe is conspiring in your favor.",
+        "Take a leap of faith; you will land on solid ground."
+      ];
+
+      // Check if the user has already received a fortune today
+      var lastTime = localStorage.getItem(name);
+      var today = new Date().toLocaleDateString();
+
+      if (!lastTime || today !== lastTime) {
+        var formData = new FormData();
+        formData.append("name", name);
+
+        // Submit the data to Google Apps Script
+        fetch('https://script.google.com/macros/s/AKfycbyxt7krYFLPOlxS3F_QNH69aB41Xkvz5HehkmBZxSNgZscsn6ngd750pG4BkBH2nxbl/exec', {
+          method: 'POST',
+          body: formData,
+        })
+        .then(response => response.text())
+        .then(data => {
+          // Display a random fortune from the list
+          var randomIndex = Math.floor(Math.random() * fortunes.length);
+          document.getElementById("fortune").innerText = fortunes[randomIndex];
+
+          // Update local storage to mark that the user has received a fortune today
+          localStorage.setItem(name, today);
+        })
+        .catch(error => {
+          // Handle error if needed
+          console.error('Error submitting data:', error);
+        });
+      } else {
+        // Inform the user that they can only get one fortune per day
+        document.getElementById("fortune").innerText = "Sorry, you can only receive one fortune per day!";
+      }
+    }
+  </script>
+</body>
+</html>
